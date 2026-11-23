@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>月の鑑定室 v0.8 | 二重円と吉凶カレンダー</title>
+<title>月の鑑定室 v1.0 | 紺×ゴールド本格ホロスコープ</title>
 <style>
 :root{--bg:#080f20;--panel:#132139;--panel2:#0c192c;--gold:#e1c589;--line:#6a5b42;--text:#fffaf0;--muted:#bcc5d2;--accent:#f3d898}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% -12%,#273b5b 0%,var(--bg) 44%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif;line-height:1.6}main{max-width:850px;margin:0 auto;padding:26px 15px 70px}header{text-align:center;padding:12px 0 18px}h1{font-size:clamp(25px,6vw,37px);font-weight:600;letter-spacing:.08em;color:var(--gold);margin:8px 0}header p{color:var(--muted);font-size:13px;margin:0}.moon{font-size:35px}.tabs{display:flex;gap:8px;margin:22px 0}.tab{flex:1;border:1px solid var(--line);background:var(--panel2);color:var(--muted);border-radius:10px;padding:12px 6px;font-size:14px;cursor:pointer}.tab.active{background:linear-gradient(125deg,#b49a61,#655536);color:#fff;border-color:var(--gold);font-weight:bold}.panel{background:linear-gradient(155deg,rgba(23,38,61,.96),rgba(14,26,44,.96));border:1px solid #746344;border-radius:18px;padding:22px 18px;margin:18px 0;box-shadow:0 8px 30px #0003}h2{font-size:20px;color:var(--gold);margin:0 0 15px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}label{display:block;color:#ecd4a9;font-size:13px;margin-bottom:5px}input,select{width:100%;padding:12px 10px;border:1px solid #645c53;border-radius:9px;background:#0b1728;color:white;font:inherit;min-height:46px;color-scheme:dark}input:focus,select:focus{outline:2px solid var(--gold)}.full{grid-column:1/-1}.row{display:flex;align-items:center;gap:8px}.row input[type=checkbox]{width:20px;min-height:20px;accent-color:#d4b97b}.row label{margin:0;color:var(--text)}button{font:inherit;cursor:pointer}.primary{border:1px solid #f2d996;border-radius:999px;background:linear-gradient(120deg,#ae9764,#645338);color:#fff;min-height:48px;padding:10px 24px;font-weight:700}.secondary{border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--gold);padding:10px 17px}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}.note{font-size:12px;color:var(--muted)}.status{margin-top:13px;color:#f5dda7;font-size:13px;min-height:20px}.chart-wrap{max-width:480px;margin:auto}svg{display:block;width:100%;height:auto}.hidden{display:none}.pill{display:inline-block;border:1px solid #8c7855;color:var(--gold);border-radius:20px;padding:3px 11px;font-size:12px}.saved-entry{border-bottom:1px solid #4e4d4c;padding:11px 0;display:flex;align-items:center;justify-content:space-between;gap:8px}.saved-entry:last-child{border-bottom:0}.saved-entry button{font-size:12px}.saved-entry span{font-size:13px;color:var(--muted)}footer{font-size:12px;text-align:center;color:var(--muted);padding:24px 4px}@media(max-width:420px){.grid{gap:10px}.panel{padding:19px 13px}.actions button{width:100%}}
 h3{color:#e6c887;font-size:14px;margin:5px 0 12px}.planetrow{display:flex;align-items:center;gap:6px;margin:7px 0}.planetrow label{min-width:58px;margin:0;font-size:12px}.planetrow input{min-width:0;padding:7px;min-height:36px;font-size:13px}.results-table{width:100%;border-collapse:collapse;font-size:12px;margin:12px 0}.results-table th,.results-table td{border-bottom:1px solid #685b45;padding:8px 5px;text-align:left}.results-table th{color:var(--gold)}.results-scroll{overflow-x:auto}.tag{font-size:11px;border:1px solid #827156;border-radius:10px;padding:2px 7px}.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
@@ -61,7 +61,7 @@ h3{color:#e6c887;font-size:14px;margin:5px 0 12px}.planetrow{display:flex;align-
 <p class="note warn">【重要】天体位置は事前計算データ（12時間間隔）を補間した試作値です。境界時刻は約6時間刻みの探索から補間した推定値であり、精密な天文暦による確定日時ではありません。鑑定や販売用の暦には使用せず、専門ソフトで照合してください。画面に表示される出生情報・計算結果はこの端末内で扱います。</p>
 </div></section>
  <section id="saved" class="tabpage hidden"><div class="panel"><h2>☽ 保存済みの出生データ</h2><div id="savedList"></div><p class="note">この端末のブラウザ内だけに保存します。ブラウザデータを削除すると消える場合があります。共有端末では個人情報に注意してください。</p></div></section>
-<footer>月の鑑定室 · Prototype v0.9.1<br>二重円・吉凶カレンダー（試算）／天体位置・ASC/MC・ハウスは検証用</footer>
+<footer>月の鑑定室 · Prototype v1.0<br>二重円・吉凶カレンダー（試算）／天体位置・ASC/MC・ハウスは検証用</footer>
 </main>
 <script>
 window.tsukiBooted=true;
@@ -119,7 +119,44 @@ let chartView='pro';try{chartView=localStorage.getItem('tsuki_chart_view')==='be
 let lastWheelData=null;
 function svgAdd(root,tag,attrs,content){const e=document.createElementNS(ns,tag);Object.entries(attrs).forEach(([k,v])=>e.setAttribute(k,v));if(content!==undefined)e.textContent=content;root.appendChild(e);return e}
 function polar(r,lon){const a=(lon-90)*Math.PI/180;return [250+r*Math.cos(a),250+r*Math.sin(a)]}
-function renderZodiacWheel(){svg.replaceChildren();const beginner=chartView==='beginner';svgAdd(svg,'circle',{cx:250,cy:250,r:235,fill:'#0b192d',stroke:'#e1c589','stroke-width':2.6});svgAdd(svg,'circle',{cx:250,cy:250,r:beginner?157:174,fill:'#11233c',stroke:'#bca372','stroke-width':1.5});svgAdd(svg,'circle',{cx:250,cy:250,r:100,fill:'#101e34',stroke:'#8f8060','stroke-width':1.5});for(let i=0;i<12;i++){const [x1,y1]=polar(beginner?157:174,i*30),[x2,y2]=polar(235,i*30);svgAdd(svg,'line',{x1,y1,x2,y2,stroke:'#776b58'});const [x,y]=polar(beginner?198:204,i*30+15);svgAdd(svg,'text',{x,y:y+(beginner?5:9),'text-anchor':'middle',fill:'#efd39a','font-size':beginner?15:27,'font-weight':beginner?600:400},beginner?zodiacNames[i]:zodiac[i]);if(!beginner){const [dx,dy]=polar(180,i*30+3);svgAdd(svg,'text',{x:dx,y:dy+4,'text-anchor':'middle',fill:'#aebccc','font-size':9},`${i*30}°`)}}svgAdd(svg,'text',{x:250,y:240,'text-anchor':'middle',fill:'#eed39a','font-size':24},'☾ 月の鑑定室');svgAdd(svg,'text',{x:250,y:267,'text-anchor':'middle',fill:'#bfc8d7','font-size':12},beginner?'やさしい表示見本':'PRO DISPLAY PREVIEW')}
+function renderZodiacWheel(){
+ svg.replaceChildren();
+ const beginner=chartView==='beginner';
+ const add=(tag,a,c)=>svgAdd(svg,tag,a,c);
+ const outerR=238, tickOuter=228, zodiacOuter=220, zodiacInner=190, houseOuter=170, houseInner=92;
+ add('rect',{x:0,y:0,width:500,height:500,fill:'#09162b'});
+ add('circle',{cx:250,cy:250,r:outerR,fill:'#0b1b33',stroke:'#e1c589','stroke-width':2.4});
+ add('circle',{cx:250,cy:250,r:tickOuter,fill:'none',stroke:'#cdaa63','stroke-width':1});
+ add('circle',{cx:250,cy:250,r:zodiacOuter,fill:'none',stroke:'#d9bb79','stroke-width':1.3});
+ add('circle',{cx:250,cy:250,r:zodiacInner,fill:'none',stroke:'#b79455','stroke-width':1.1});
+ add('circle',{cx:250,cy:250,r:houseOuter,fill:'none',stroke:'#b79455','stroke-width':1.1});
+ add('circle',{cx:250,cy:250,r:houseInner,fill:'none',stroke:'#8e754b','stroke-width':1.1});
+ add('circle',{cx:250,cy:250,r:72,fill:'#0f213d',stroke:'#8e754b','stroke-width':1.1});
+ for(let d=0;d<360;d++){
+   const major=d%30===0, mid=d%10===0;
+   const r1=major?tickOuter-16:mid?tickOuter-10:tickOuter-6;
+   const [x1,y1]=polar(r1,d),[x2,y2]=polar(tickOuter,d);
+   add('line',{x1,y1,x2,y2,stroke:major?'#e1c589':mid?'#bfa16a':'#806946','stroke-width':major?1.2:.8,opacity:major?1:.75});
+ }
+ for(let i=0;i<12;i++){
+   const deg=i*30;
+   const [x1,y1]=polar(zodiacInner,deg),[x2,y2]=polar(outerR,deg);
+   add('line',{x1,y1,x2,y2,stroke:'#846a42','stroke-width':1});
+   const [zx,zy]=polar((zodiacOuter+zodiacInner)/2,deg+15);
+   add('text',{x:zx,y:zy+(beginner?4:8),'text-anchor':'middle',fill:'#f1d79f','font-size':beginner?14:26,'font-weight':'600'},beginner?zodiacNames[i]:zodiac[i]);
+   if(!beginner){
+     const [dx,dy]=polar(zodiacInner-8,deg+2);
+     add('text',{x:dx,y:dy+3,'text-anchor':'middle',fill:'#9cb0c5','font-size':8},`${deg}°`)
+   }
+ }
+ for(let i=0;i<12;i++){
+   const deg=i*30;
+   const [x1,y1]=polar(houseInner,deg),[x2,y2]=polar(zodiacInner,deg);
+   add('line',{x1,y1,x2,y2,stroke:'#675536','stroke-width':.9,opacity:.9});
+ }
+ add('text',{x:250,y:240,'text-anchor':'middle',fill:'#eed39a','font-size':24,'font-weight':'700'},'☾ 月の鑑定室');
+ add('text',{x:250,y:266,'text-anchor':'middle',fill:'#bfc8d7','font-size':12},beginner?'やさしい表示見本':'PRO DISPLAY PREVIEW');
+}
 function setChartView(view){chartView=view;try{localStorage.setItem('tsuki_chart_view',view)}catch{}document.querySelectorAll('.view-choice').forEach(b=>{const active=b.dataset.view===view;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active))});$('viewHint').textContent=view==='pro'?'プロ表示：天体記号・星座記号・度数を表示します。':'初心者表示：星座名・天体名を日本語で表示します。';renderZodiacWheel();if(lastWheelData)drawAspectWheel(...lastWheelData);if(window.latestAutoNatal)paintNatalChart(window.latestAutoNatal)}
 document.querySelectorAll('.view-choice').forEach(b=>b.addEventListener('click',()=>setChartView(b.dataset.view)));
 
@@ -132,8 +169,16 @@ function angleDiff(a,b){const v=Math.abs(a-b)%360;return Math.min(v,360-v)}
 function calcPairs(A,B,mode,orb,allowed){const out=[];for(let i=0;i<A.length;i++)for(let j=0;j<B.length;j++){if(mode==='natal'&&j<=i)continue;const d=angleDiff(A[i].lon,B[j].lon);const candidate=aspectAngles.filter(([,angle])=>allowed.includes(angle)).map(([name,angle,symbol])=>({name,angle,symbol,deviation:Math.abs(d-angle)})).sort((x,y)=>x.deviation-y.deviation)[0];if(candidate&&candidate.deviation<=orb+1e-8)out.push({a:A[i],b:B[j],degrees:d,...candidate})}return out.sort((x,y)=>x.deviation-y.deviation)}
 function showAspectTable(data){const root=$('aspectResult');root.replaceChildren();const count=document.createElement('div');count.textContent=data.length+' 件のアスペクトが見つかりました。';root.append(count);if(!data.length)return;const scroll=document.createElement('div');scroll.className='results-scroll';const table=document.createElement('table');table.className='results-table';const head=document.createElement('tr');['天体1','角度','天体2','実角度','誤差'].forEach(t=>{const th=document.createElement('th');th.textContent=t;head.append(th)});table.append(head);data.forEach(x=>{const tr=document.createElement('tr');[x.a.label,x.symbol+' '+x.name,x.b.label,x.degrees.toFixed(2)+'°',x.deviation.toFixed(2)+'°'].forEach(t=>{const td=document.createElement('td');td.textContent=t;tr.append(td)});table.append(tr)});scroll.append(table);root.append(scroll)}
 const svga=$('aspectWheel');
-function drawAspectWheel(A,B,pairs,mode){lastWheelData=[A,B,pairs,mode];svga.replaceChildren();const beginner=chartView==='beginner';const add=(tag,a,content)=>svgAdd(svga,tag,a,content);add('circle',{cx:250,cy:250,r:238,fill:'#0b192d',stroke:'#e1c589','stroke-width':2});add('circle',{cx:250,cy:250,r:beginner?164:177,fill:'#102139',stroke:'#bda36f','stroke-width':1.5});add('circle',{cx:250,cy:250,r:114,fill:'#0b192d',stroke:'#bda36f','stroke-width':1});for(let i=0;i<12;i++){const [x1,y1]=polar(beginner?164:177,i*30),[x2,y2]=polar(238,i*30);add('line',{x1,y1,x2,y2,stroke:'#776b58'});const [tx,ty]=polar(beginner?201:209,i*30+15);add('text',{x:tx,y:ty+(beginner?5:9),'text-anchor':'middle',fill:'#e6c889','font-size':beginner?15:25,'font-weight':beginner?'600':'normal'},beginner?zodiacNames[i]:zodiac[i])}pairs.forEach(p=>{if(mode!=='natal')return;const [x1,y1]=polar(102,p.a.lon),[x2,y2]=polar(102,p.b.lon);add('line',{x1,y1,x2,y2,stroke:p.angle===90||p.angle===180?'#c87676':'#78a9bf','stroke-width':1.4,opacity:.72})});
-function drawPoints(items,r,color){items.forEach(it=>{const [x,y]=polar(r,it.lon);const label=beginner?it.label.replace(/^[^ ]+ /,''):it.glyph;const degrees=(it.lon%30).toFixed(1)+'°';if(beginner){add('rect',{x:x-24,y:y-15,width:48,height:29,rx:8,fill:'#0b1728',stroke:color,'stroke-width':1});add('text',{x,y:y-1,'text-anchor':'middle',fill:color,'font-size':12,'font-weight':700},label);add('text',{x,y:y+11,'text-anchor':'middle',fill:'#e0e8ed','font-size':10},degrees)}else{add('circle',{cx:x,cy:y,r:14,fill:'#0c1728',stroke:color,'stroke-width':1});add('text',{x,y:y+6,'text-anchor':'middle',fill:color,'font-size':21},it.glyph);const [dx,dy]=polar(r>140?180:117,it.lon);add('text',{x:dx,y:dy+4,'text-anchor':'middle',fill:'#e3d9c2','font-size':10},degrees)}})}drawPoints(A,beginner?149:151,'#eecb80');if(mode!=='natal')drawPoints(B,beginner?122:129,'#92d2e5');add('text',{x:250,y:246,'text-anchor':'middle',fill:'#d6c39c','font-size':15},'月の鑑定室');add('text',{x:250,y:269,'text-anchor':'middle',fill:'#a9bacd','font-size':10},beginner?'初心者表示 · 手入力':'PRO · MANUAL INPUT')}
+function drawAspectWheel(A,B,pairs,mode){lastWheelData=[A,B,pairs,mode];svga.replaceChildren();const beginner=chartView==='beginner';const add=(tag,a,content)=>svgAdd(svga,tag,a,content);const outerR=238,tickOuter=228,zodiacOuter=220,zodiacInner=190,ringA=156,ringB=118,centerR=76;
+add('rect',{x:0,y:0,width:500,height:500,fill:'#09162b'});
+for(const r of [outerR,tickOuter,zodiacOuter,zodiacInner,ringA,ringB,centerR])add('circle',{cx:250,cy:250,r,fill:r===outerR?'#0b1b33':'none',stroke:r===outerR?'#e1c589':'#b79455','stroke-width':r===outerR?2.2:1});
+for(let d=0;d<360;d++){const major=d%30===0,mid=d%10===0;const r1=major?tickOuter-16:mid?tickOuter-10:tickOuter-6;const [x1,y1]=polar(r1,d),[x2,y2]=polar(tickOuter,d);add('line',{x1,y1,x2,y2,stroke:major?'#e1c589':mid?'#bfa16a':'#806946','stroke-width':major?1.2:.8,opacity:major?1:.75})}
+for(let i=0;i<12;i++){const deg=i*30;const [x1,y1]=polar(zodiacInner,deg),[x2,y2]=polar(outerR,deg);add('line',{x1,y1,x2,y2,stroke:'#846a42','stroke-width':1});const [tx,ty]=polar((zodiacOuter+zodiacInner)/2,deg+15);add('text',{x:tx,y:ty+(beginner?4:8),'text-anchor':'middle',fill:'#f1d79f','font-size':beginner?14:24,'font-weight':'600'},beginner?zodiacNames[i]:zodiac[i])}
+pairs.forEach(p=>{if(mode!=='natal')return;const [x1,y1]=polar(centerR-2,p.a.lon),[x2,y2]=polar(centerR-2,p.b.lon);const stroke=p.angle===0?'#d9bd74':p.angle===90||p.angle===180?'#dc8e8c':'#7bb8da';add('line',{x1,y1,x2,y2,stroke,'stroke-width':p.angle===0?1.1:1.5,opacity:.8})});
+function drawPoints(items,r,color){items.forEach(it=>{const [x,y]=polar(r,it.lon);const label=beginner?it.label.replace(/^[^ ]+ /,''):it.glyph;const degrees=(it.lon%30).toFixed(1)+'°';if(beginner){add('rect',{x:x-25,y:y-14,width:50,height:28,rx:8,fill:'#0b1728',stroke:color,'stroke-width':1});add('text',{x,y:y-1,'text-anchor':'middle',fill:color,'font-size':12,'font-weight':700},label);add('text',{x,y:y+10,'text-anchor':'middle',fill:'#f0eadc','font-size':9},degrees)}else{add('circle',{cx:x,cy:y,r:13,fill:'#0d1a2d',stroke:color,'stroke-width':1.1});add('text',{x,y:y+5.5,'text-anchor':'middle',fill:color,'font-size':19},it.glyph);const [dx,dy]=polar(r>135?175:137,it.lon);add('text',{x:dx,y:dy+3,'text-anchor':'middle',fill:'#f0e2c2','font-size':9},degrees)}})}
+drawPoints(A,mode!=='natal'?(beginner?145:148):(beginner?132:136),'#eecb80');if(mode!=='natal')drawPoints(B,beginner?108:113,'#97d6ea');
+add('text',{x:250,y:242,'text-anchor':'middle',fill:'#d6c39c','font-size':15},'月の鑑定室');add('text',{x:250,y:264,'text-anchor':'middle',fill:'#a9bacd','font-size':10},beginner?(mode==='natal'?'初心者表示 · ネイタル':'初心者表示 · 二重円'):(mode==='natal'?'PRO · NATAL':'PRO · DUAL RING'))}
+
 setChartView(chartView);
 
 $('calcAspects').addEventListener('click',()=>{try{const A=positions('A'),B=positions('B'),mode=$('mode').value,orb=Number($('orb').value);if(!Number.isFinite(orb)||orb<0||orb>15)throw Error('オーブは0〜15度で入力してください。');if(A.length===0)throw Error('出生1の天体黄経を入力してください。');if(mode!=='natal'&&!B.length)throw Error('出生2／トランジットの天体黄経を入力してください。');const allowed=$('asptype').value==='four'?[0,90,120,180]:[0,60,90,120,180],pairs=calcPairs(A,mode==='natal'?A:B,mode,orb,allowed);showAspectTable(pairs);drawAspectWheel(A,B,pairs,mode)}catch(e){$('aspectResult').textContent=e.message}});
@@ -202,44 +247,41 @@ function getAngles(date){
 }
 function paintNatalChart(items){
  renderZodiacWheel();const root=$('wheel'),beginner=chartView==='beginner',angles=window.latestAngles;
- // Remove center watermark after a successful computation.
  Array.from(root.querySelectorAll('text')).filter(t=>['☾ 月の鑑定室','PRO DISPLAY PREVIEW','やさしい表示見本'].includes(t.textContent)).forEach(t=>t.remove());
- // Equal-house boundaries are longitudes starting at ASC; these are NOT Placidus cusps.
+ const zodiacInner=190, houseOuter=170, houseInner=92, centerR=74;
  if(angles){
    for(let i=0;i<12;i++){
-    const deg=normalize(angles.asc+i*30),[x1,y1]=polar(101,deg),[x2,y2]=polar(beginner?158:174,deg);
-    svgAdd(root,'line',{x1,y1,x2,y2,stroke:'#e7c58a','stroke-width':i===0?2.7:1.0,opacity:i===0?1:.75});
-    const [tx,ty]=polar(111,deg+14);
-    svgAdd(root,'text',{x:tx,y:ty+3,'text-anchor':'middle',fill:'#d5bb81','font-size':10},String(i+1));
+    const deg=normalize(angles.asc+i*30),[x1,y1]=polar(houseInner,deg),[x2,y2]=polar(zodiacInner,deg);
+    svgAdd(root,'line',{x1,y1,x2,y2,stroke:'#d8bb7c','stroke-width':i===0?2.1:1.0,opacity:i===0?1:.82});
+    const [tx,ty]=polar((houseInner+zodiacInner)/2,deg+14);
+    svgAdd(root,'text',{x:tx,y:ty+3,'text-anchor':'middle',fill:'#d6bb82','font-size':10,'font-weight':'600'},String(i+1));
    }
  }
  const orb=Number($('orb').value),allowed=$('asptype').value==='four'?[0,90,120,180]:[0,60,90,120,180];
  const pairs=calcPairs(items,items,'natal',Number.isFinite(orb)&&orb>=0&&orb<=15?orb:5,allowed);
- // Aspect lines within center, without houses or planetary markers obscuring them.
  pairs.forEach(p=>{
-   const [x1,y1]=polar(85,p.a.lon),[x2,y2]=polar(85,p.b.lon);
-   const stroke=p.angle===0?'#e3c47b':p.angle===90||p.angle===180?'#e89a98':'#82c4e0';
-   svgAdd(root,'line',{x1,y1,x2,y2,stroke,'stroke-width':p.angle===0?1.2:1.7,opacity:.72});
+   const [x1,y1]=polar(centerR,p.a.lon),[x2,y2]=polar(centerR,p.b.lon);
+   const stroke=p.angle===0?'#d9bd74':p.angle===90||p.angle===180?'#da8a88':'#76b7dd';
+   svgAdd(root,'line',{x1,y1,x2,y2,stroke,'stroke-width':p.angle===0?1.0:1.6,opacity:.82});
  });
- // Keep nearby bodies legible: offset marker rings when separation is < 9 degrees.
  const sorted=[...items].sort((a,b)=>a.lon-b.lon),lastAngle=sorted.length?sorted[sorted.length-1].lon-360:-1000;
  let prev=lastAngle,group=0;
  sorted.forEach((it,i)=>{
   if(i===0&&it.lon-lastAngle<9)group=1;
   else if(it.lon-prev<9)group=(group+1)%3;
   else group=0;
-  it._renderR=(beginner?134:136)-group*18;prev=it.lon;
+  it._renderR=(beginner?148:151)-group*18;prev=it.lon;
  });
  for(const it of sorted){
   const r=it._renderR,[x,y]=polar(r,it.lon),d=(it.lon%30).toFixed(1)+'°';
-  svgAdd(root,'circle',{cx:x,cy:y,r:beginner?16:14,fill:'#0c192c',stroke:'#e4c280','stroke-width':1.2});
-  svgAdd(root,'text',{x,y:y+(beginner?3:6),'text-anchor':'middle',fill:'#f2d9a3','font-size':beginner?11:18},beginner?it.label.replace(/^[^ ]+ /,'').slice(0,2):it.glyph);
-  const [dx,dy]=polar(r+19,it.lon);
+  svgAdd(root,'circle',{cx:x,cy:y,r:beginner?15:13.5,fill:'#0d1a2d',stroke:'#e4c280','stroke-width':1.2});
+  svgAdd(root,'text',{x,y:y+(beginner?4:5.5),'text-anchor':'middle',fill:'#f2d9a3','font-size':beginner?11:19},beginner?it.label.replace(/^[^ ]+ /,'').slice(0,2):it.glyph);
+  const [dx,dy]=polar(r+18,it.lon);
   svgAdd(root,'text',{x:dx,y:dy+3,'text-anchor':'middle',fill:'#f0e3c5','font-size':9},d);
  }
  if(angles){
   for(const [name,lon,col] of [['ASC',angles.asc,'#e4c17a'],['MC',angles.mc,'#9dd5ec']]){
-   const [x,y]=polar(218,lon);
+   const [x,y]=polar(214,lon);
    svgAdd(root,'circle',{cx:x,cy:y,r:17,fill:'#102039',stroke:col,'stroke-width':1.4});
    svgAdd(root,'text',{x,y:y+4,'text-anchor':'middle',fill:col,'font-size':11,'font-weight':'bold'},name);
   }
@@ -254,6 +296,7 @@ function paintNatalChart(items){
  pairs.forEach(p=>{const row=document.createElement('tr');[p.a.label,p.symbol+' '+p.name,p.b.label,p.deviation.toFixed(2)+'°'].forEach(txt=>{let td=document.createElement('td');td.textContent=txt;row.append(td)});t.append(row)});
  if(!pairs.length){const hint=document.createElement('p');hint.className='note';hint.textContent='この条件に当てはまるアスペクトはありません。';table.append(hint)} else table.append(t);
 }
+
 $('autoNatal').addEventListener('click',()=>{
  const status=$('autoStatus');status.textContent='天体位置を計算しています…';
  try{

@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>月の鑑定室 v1.3 | 全円盤で星座反時計回り</title>
+<title>月の鑑定室 v1.4 | 全円盤で星座反時計回り</title>
 <style>
 :root{--bg:#080f20;--panel:#132139;--panel2:#0c192c;--gold:#e1c589;--line:#6a5b42;--text:#fffaf0;--muted:#bcc5d2;--accent:#f3d898}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% -12%,#273b5b 0%,var(--bg) 44%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif;line-height:1.6}main{max-width:850px;margin:0 auto;padding:26px 15px 70px}header{text-align:center;padding:12px 0 18px}h1{font-size:clamp(25px,6vw,37px);font-weight:600;letter-spacing:.08em;color:var(--gold);margin:8px 0}header p{color:var(--muted);font-size:13px;margin:0}.moon{font-size:35px}.tabs{display:flex;gap:8px;margin:22px 0}.tab{flex:1;border:1px solid var(--line);background:var(--panel2);color:var(--muted);border-radius:10px;padding:12px 6px;font-size:14px;cursor:pointer}.tab.active{background:linear-gradient(125deg,#b49a61,#655536);color:#fff;border-color:var(--gold);font-weight:bold}.panel{background:linear-gradient(155deg,rgba(23,38,61,.96),rgba(14,26,44,.96));border:1px solid #746344;border-radius:18px;padding:22px 18px;margin:18px 0;box-shadow:0 8px 30px #0003}h2{font-size:20px;color:var(--gold);margin:0 0 15px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}label{display:block;color:#ecd4a9;font-size:13px;margin-bottom:5px}input,select{width:100%;padding:12px 10px;border:1px solid #645c53;border-radius:9px;background:#0b1728;color:white;font:inherit;min-height:46px;color-scheme:dark}input:focus,select:focus{outline:2px solid var(--gold)}.full{grid-column:1/-1}.row{display:flex;align-items:center;gap:8px}.row input[type=checkbox]{width:20px;min-height:20px;accent-color:#d4b97b}.row label{margin:0;color:var(--text)}button{font:inherit;cursor:pointer}.primary{border:1px solid #f2d996;border-radius:999px;background:linear-gradient(120deg,#ae9764,#645338);color:#fff;min-height:48px;padding:10px 24px;font-weight:700}.secondary{border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--gold);padding:10px 17px}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}.note{font-size:12px;color:var(--muted)}.status{margin-top:13px;color:#f5dda7;font-size:13px;min-height:20px}.chart-wrap{max-width:480px;margin:auto}svg{display:block;width:100%;height:auto}.hidden{display:none}.pill{display:inline-block;border:1px solid #8c7855;color:var(--gold);border-radius:20px;padding:3px 11px;font-size:12px}.saved-entry{border-bottom:1px solid #4e4d4c;padding:11px 0;display:flex;align-items:center;justify-content:space-between;gap:8px}.saved-entry:last-child{border-bottom:0}.saved-entry button{font-size:12px}.saved-entry span{font-size:13px;color:var(--muted)}footer{font-size:12px;text-align:center;color:var(--muted);padding:24px 4px}@media(max-width:420px){.grid{gap:10px}.panel{padding:19px 13px}.actions button{width:100%}}
 h3{color:#e6c887;font-size:14px;margin:5px 0 12px}.planetrow{display:flex;align-items:center;gap:6px;margin:7px 0}.planetrow label{min-width:58px;margin:0;font-size:12px}.planetrow input{min-width:0;padding:7px;min-height:36px;font-size:13px}.results-table{width:100%;border-collapse:collapse;font-size:12px;margin:12px 0}.results-table th,.results-table td{border-bottom:1px solid #685b45;padding:8px 5px;text-align:left}.results-table th{color:var(--gold)}.results-scroll{overflow-x:auto}.tag{font-size:11px;border:1px solid #827156;border-radius:10px;padding:2px 7px}.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
@@ -26,14 +26,14 @@ h3{color:#e6c887;font-size:14px;margin:5px 0 12px}.planetrow{display:flex;align-
   <div class="full"><label for="cityPreset">出生地の代表地点（都市を選択）</label><select id="cityPreset"><option value="">緯度・経度を手入力</option><option value="ehime">愛媛県（松山市・代表地点）</option><option value="tokyo">東京都（東京）</option><option value="osaka">大阪府（大阪市）</option><option value="kobe">兵庫県（神戸市）</option><option value="hiroshima">広島県（広島市）</option><option value="nagoya">愛知県（名古屋市）</option><option value="sapporo">北海道（札幌市）</option><option value="fukuoka">福岡県（福岡市）</option><option value="sendai">宮城県（仙台市）</option><option value="naha">沖縄県（那覇市）</option></select></div>
  <div><label for="latitude">出生地の緯度（北緯＋）</label><input id="latitude" type="number" min="-89" max="89" step="0.0001" placeholder="都市を選択すると入力"></div>
  <div><label for="longitude">出生地の経度（東経＋）</label><input id="longitude" type="number" min="-180" max="180" step="0.0001" placeholder="都市を選択すると入力"></div>
- <div class="full coordinfo">ハウスは<strong>イコールハウス方式（ASCから30°ずつ）</strong>で試験実装。県名だけでは出生位置を特定できないため、代表都市を仮設定しています。正確な出生地がわかる場合は緯度・経度を修正してください。時刻不明ならASC・MC・ハウスは表示しません。</div>
+ <div class="full coordinfo">ハウスは<strong>プラシーダス方式（不等分ハウス）</strong>で計算します（検証版）。県名だけでは出生位置を特定できないため、代表都市を仮設定しています。正確な出生地がわかる場合は緯度・経度を修正してください。時刻不明ならASC・MC・ハウスは表示しません。</div>
  <div class="full row"><input type="checkbox" id="unknown"><label for="unknown">出生時刻が不明</label></div>
  </div><div class="actions"><button class="primary" id="autoNatal">☽ 天体を自動計算</button><button class="secondary" id="save">出生データを保存</button><button class="secondary" id="viewChart">円盤を見る</button><button class="secondary" id="clearNatal">入力を空欄にする</button></div><div id="diagnostic" class="status" style="border:1px solid #816e4c;padding:10px;border-radius:8px;margin-top:12px;color:#ffce98">⚠ この画面ではJavaScriptが実行されていません。ChatGPT内のファイルプレビューでは計算できない場合があります。Webサイトとして公開し、Safariから開いてください。</div>
 <div class="status" id="autoStatus" aria-live="polite"></div><div id="autoPositions" class="auto-list"></div><div class="status" id="status"></div>
  </div>
- <div class="panel"><h2>✦ 次の開発ステップ</h2><p>出生日時から太陽〜冥王星の地心黄経を計算し、円盤・主要アスペクトに反映します。出生時刻と位置が確定している場合はASC・MC・イコールハウスを概算表示します。</p><p class="note">天体位置はSwiss EphemerisのMoshier法で事前計算した値を12時間間隔で収録し、補間して表示しています（1900〜2100年）。試作品のため度数には小さな誤差があり、鑑定前に専門ソフトで照合してください。ASC・MCは概算法、ハウスはイコールハウス方式のみ。プラシーダス方式ではありません。</p></div>
+ <div class="panel"><h2>✦ 次の開発ステップ</h2><p>出生日時から太陽〜冥王星の地心黄経を計算し、円盤・主要アスペクトに反映します。出生時刻と位置が確定している場合はASC・MC・プラシーダス方式のカスプを計算表示します。</p><p class="note">天体位置はSwiss EphemerisのMoshier法で事前計算した値を12時間間隔で収録し、補間して表示しています（1900〜2100年）。試作品のため度数には小さな誤差があり、鑑定前に専門ソフトで照合してください。ASC・MCは概算法、ハウスはプラシーダスハウス方式のみ。プラシーダス方式ではありません。</p></div>
 </section>
-<section id="chart" class="tabpage hidden"><div class="panel"><h2>✧ 12星座ホイール</h2><p class="note">出生データ画面の「天体を自動計算」で配置を表示します。出生時刻が判明している場合のみイコールハウス・ASC・MCを描画します。</p><div class="view-switch" role="group" aria-label="チャート表示モード"><button type="button" class="view-choice active" data-view="pro" aria-pressed="true">✦ プロ表示</button><button type="button" class="view-choice" data-view="beginner" aria-pressed="false">☽ 初心者表示</button></div><div class="chart-wrap"><svg id="wheel" viewBox="0 0 500 500" role="img" aria-label="12星座を並べたホロスコープ円盤のデザイン見本"></svg></div><div style="text-align:center;margin-top:8px"><span id="chartFlag" class="pill">計算前：星座のデザイン見本</span></div>
+<section id="chart" class="tabpage hidden"><div class="panel"><h2>✧ 12星座ホイール</h2><p class="note">出生データ画面の「天体を自動計算」で配置を表示します。出生時刻が判明している場合のみプラシーダスハウス・ASC・MCを描画します。</p><div class="view-switch" role="group" aria-label="チャート表示モード"><button type="button" class="view-choice active" data-view="pro" aria-pressed="true">✦ プロ表示</button><button type="button" class="view-choice" data-view="beginner" aria-pressed="false">☽ 初心者表示</button></div><div class="chart-wrap"><svg id="wheel" viewBox="0 0 500 500" role="img" aria-label="12星座を並べたホロスコープ円盤のデザイン見本"></svg></div><div style="text-align:center;margin-top:8px"><span id="chartFlag" class="pill">計算前：星座のデザイン見本</span></div>
 <div id="angleDetails" class="chart-info" hidden></div><div id="chartLegend" class="smalllegend" hidden>アスペクト線：赤＝スクエア・オポジション ／ 青＝セクスタイル・トライン ／ 金＝コンジャンクション。オーブはアスペクト画面の設定に従います。</div>
 <div id="natalAspectDetails" class="results-scroll"></div></div></section>
 <section id="aspects" class="tabpage hidden">
@@ -61,7 +61,7 @@ h3{color:#e6c887;font-size:14px;margin:5px 0 12px}.planetrow{display:flex;align-
 <p class="note warn">【重要】天体位置は事前計算データ（12時間間隔）を補間した試作値です。境界時刻は約6時間刻みの探索から補間した推定値であり、精密な天文暦による確定日時ではありません。鑑定や販売用の暦には使用せず、専門ソフトで照合してください。画面に表示される出生情報・計算結果はこの端末内で扱います。</p>
 </div></section>
  <section id="saved" class="tabpage hidden"><div class="panel"><h2>☽ 保存済みの出生データ</h2><div id="savedList"></div><p class="note">この端末のブラウザ内だけに保存します。ブラウザデータを削除すると消える場合があります。共有端末では個人情報に注意してください。</p></div></section>
-<footer>月の鑑定室 · Prototype v1.3<br>二重円・吉凶カレンダー（試算）／天体位置・ASC/MC・ハウスは検証用</footer>
+<footer>月の鑑定室 · Prototype v1.4<br>二重円・吉凶カレンダー（試算）／天体位置・ASC/MC・プラシーダス方式は検証用</footer>
 </main>
 <script>
 window.tsukiBooted=true;
@@ -155,11 +155,6 @@ function renderZodiacWheel(){
      add('text',{x:dx,y:dy+3,'text-anchor':'middle',fill:'#9cb0c5','font-size':8},`${deg}°`)
    }
  }
- for(let i=0;i<12;i++){
-   const deg=i*30;
-   const [x1,y1]=wheelPolar(houseInner,deg),[x2,y2]=wheelPolar(zodiacInner,deg);
-   add('line',{x1,y1,x2,y2,stroke:'#675536','stroke-width':.9,opacity:.9});
- }
  add('text',{x:250,y:240,'text-anchor':'middle',fill:'#eed39a','font-size':24,'font-weight':'700'},'☾ 月の鑑定室');
  add('text',{x:250,y:266,'text-anchor':'middle',fill:'#bfc8d7','font-size':12},beginner?'やさしい表示見本':'PRO DISPLAY PREVIEW');
 }
@@ -238,18 +233,84 @@ function paintAutoList(items){const host=$('autoPositions');host.replaceChildren
 const cityCoords={ehime:[33.8392,132.7657],tokyo:[35.6762,139.6503],osaka:[34.6937,135.5023],kobe:[34.6901,135.1955],hiroshima:[34.3853,132.4553],nagoya:[35.1815,136.9066],sapporo:[43.0618,141.3545],fukuoka:[33.5902,130.4017],sendai:[38.2682,140.8694],naha:[26.2124,127.6809]};
 $('cityPreset').addEventListener('change',()=>{const pos=cityCoords[$('cityPreset').value];if(pos){$('latitude').value=pos[0];$('longitude').value=pos[1]}});
 ['latitude','longitude'].forEach(id=>$(id).addEventListener('input',()=>{$('cityPreset').value=''}));
+// Placidus house cusps: solve the semi-diurnal-arc equations on the ecliptic.
+// Tropical ecliptic coordinates; geographic longitude east-positive.
+// For each cusp we solve hour angle H = ± (1/3 or 2/3) * semi-diurnal arc.
+// This reproduces the standard Placidus cusp divisions at ordinary latitudes.
+function signedAngle(x){return ((x+540)%360)-180}
+function calculatePlacidus(theta,ob,lat,asc,mc){
+ const rad=Math.PI/180, eps=ob*rad,phi=lat*rad;
+ function residual(lambda,fraction,sign){
+  const l=lambda*rad;
+  const ra=normalize(Math.atan2(Math.sin(l)*Math.cos(eps),Math.cos(l))/rad);
+  const dec=Math.asin(Math.sin(eps)*Math.sin(l));
+  const arcArg=-Math.tan(phi)*Math.tan(dec);
+  if(arcArg<=-1||arcArg>=1) return NaN; // circumpolar: no valid Placidus cusp
+  const sa=Math.acos(arcArg)/rad;
+  return signedAngle(theta-ra-sign*fraction*sa);
+ }
+ function solve(fraction,sign){
+  let prev=residual(0,fraction,sign),roots=[];
+  for(let degree=1;degree<=360;degree++){
+   const curr=residual(degree%360,fraction,sign);
+   if(Number.isFinite(prev)&&Number.isFinite(curr)&&prev*curr<=0&&Math.abs(curr-prev)<160){
+    let lo=degree-1,hi=degree,fl=prev;
+    for(let j=0;j<36;j++){
+     const mid=(lo+hi)/2,fm=residual(mid,fraction,sign);
+     if(!Number.isFinite(fm)) break;
+     if(fl*fm<=0){hi=mid}else{lo=mid;fl=fm}
+    }
+    roots.push(normalize((lo+hi)/2));
+   }
+   prev=curr;
+  }
+  if(roots.length!==1)throw Error('この緯度・日時ではプラシーダスのハウスを安定して算出できません。出生地を確認してください。');
+  return roots[0];
+ }
+ const cusp11=solve(1/3,-1),cusp12=solve(2/3,-1);
+ const cusp9=solve(1/3,1),cusp8=solve(2/3,1);
+ const cusps=[asc,normalize(cusp8+180),normalize(cusp9+180),normalize(mc+180),normalize(cusp11+180),normalize(cusp12+180),normalize(asc+180),cusp8,cusp9,mc,cusp11,cusp12];
+ // Validate that cusp order progresses in zodiacal longitude.
+ for(let i=0;i<12;i++){const delta=normalize(cusps[(i+1)%12]-cusps[i]);if(delta<.001||delta>100)throw Error('プラシーダスのハウス境界を計算できません。緯度を確認してください。')}
+ return cusps;
+}
 function getAngles(date){
  if($('unknown').checked)return null;
  const lat=Number($('latitude').value),lon=Number($('longitude').value);
- if($('latitude').value===''||$('longitude').value===''||!Number.isFinite(lat)||!Number.isFinite(lon)||Math.abs(lat)>=89||Math.abs(lon)>180)throw Error('ASC計算には有効な緯度（−89〜89）・経度（−180〜180）が必要です。');
+ if($('latitude').value===''||$('longitude').value===''||!Number.isFinite(lat)||!Number.isFinite(lon)||Math.abs(lat)>=66||Math.abs(lon)>180)throw Error('プラシーダス方式には出生地の正確な緯度・経度が必要です（緯度66°以上はこの版では非対応）。');
  const jd=date.getTime()/86400000+2440587.5;
  const T=(jd-2451545)/36525;
  const gmst=280.46061837+360.98564736629*(jd-2451545)+.000387933*T*T-T*T*T/38710000;
  const r=Math.PI/180;
- const lst=normalize(gmst+lon)*r, ob=(23.439291-.0130042*T)*r,phi=lat*r;
+ const theta=normalize(gmst+lon);
+ const lst=theta*r, ob=(23.439291-.0130042*T)*r,phi=lat*r;
  const asc=normalize(Math.atan2(Math.cos(lst),-(Math.sin(lst)*Math.cos(ob)+Math.tan(phi)*Math.sin(ob)))/r);
  const mc=normalize(Math.atan2(Math.sin(lst)/Math.cos(ob),Math.cos(lst))/r);
- return {asc,mc,lat,lon};
+ const cusps=calculatePlacidus(theta,ob/r,lat,asc,mc);
+ return {asc,mc,lat,lon,cusps,houseSystem:'Placidus'};
+}
+function degMinString(lon){
+ const tenths=Math.round(normalize(lon%30)*60);let degrees=Math.floor(tenths/60),min=tenths%60;
+ if(degrees===30){degrees=0;min=0}return `${String(degrees).padStart(2,'0')}°${String(min).padStart(2,'0')}′`;
+}
+// Distribute close planet symbols over available radial lanes, while pointing back
+// to their TRUE ecliptic longitude using gold leader lines.
+function layOutPlanetBadges(items,wheelPolar){
+ const occupied=[],slots=[155,120,175,100,137];
+ const pts=[];
+ for(const it of [...items].sort((a,b)=>a.lon-b.lon)){
+  let chosen=null,best=-1e9;
+  for(const off of [0,-4,4,-8,8,-12,12,-16,16,-20,20]){
+   for(const r of slots){
+    const [x,y]=wheelPolar(r,normalize(it.lon+off));
+    const dmin=occupied.length?Math.min(...occupied.map(p=>Math.hypot(x-p.x,y-p.y))):999;
+    const score=dmin>=41? 200-Math.abs(off)*4-Math.abs(r-155)*.23 : dmin-Math.abs(off)*.4;
+    if(score>best){best=score;chosen={it,x,y,r,lonLabel:normalize(it.lon+off)}}
+   }
+  }
+  occupied.push(chosen);pts.push(chosen);
+ }
+ return pts;
 }
 function paintNatalChart(items){
  renderZodiacWheel();const root=$('wheel'),beginner=chartView==='beginner',angles=window.latestAngles;
@@ -260,9 +321,11 @@ function paintNatalChart(items){
 
  if(angles){
    for(let i=0;i<12;i++){
-    const deg=normalize(angles.asc+i*30),[x1,y1]=wheelPolar(houseInner,deg),[x2,y2]=wheelPolar(zodiacInner,deg);
-    svgAdd(root,'line',{x1,y1,x2,y2,stroke:'#d8bb7c','stroke-width':i===0?2.1:1.0,opacity:i===0?1:.82});
-    const [tx,ty]=wheelPolar((houseInner+zodiacInner)/2,deg+14);
+    const deg=angles.cusps[i],[x1,y1]=wheelPolar(houseInner,deg),[x2,y2]=wheelPolar(zodiacInner,deg);
+    svgAdd(root,'line',{x1,y1,x2,y2,stroke:'#d8bb7c','stroke-width':[0,3,6,9].includes(i)?2.1:1.0,opacity:.86});
+    const span=normalize(angles.cusps[(i+1)%12]-deg);
+    const middle=normalize(deg+span/2);
+    const [tx,ty]=wheelPolar(133,middle);
     svgAdd(root,'text',{x:tx,y:ty+3,'text-anchor':'middle',fill:'#d6bb82','font-size':10,'font-weight':'600'},String(i+1));
    }
  }
@@ -273,20 +336,18 @@ function paintNatalChart(items){
    const stroke=p.angle===0?'#d9bd74':p.angle===90||p.angle===180?'#da8a88':'#76b7dd';
    svgAdd(root,'line',{x1,y1,x2,y2,stroke,'stroke-width':p.angle===0?1.0:1.6,opacity:.82});
  });
- const sorted=[...items].sort((a,b)=>a.lon-b.lon),lastAngle=sorted.length?sorted[sorted.length-1].lon-360:-1000;
- let prev=lastAngle,group=0;
- sorted.forEach((it,i)=>{
-  if(i===0&&it.lon-lastAngle<9)group=1;
-  else if(it.lon-prev<9)group=(group+1)%3;
-  else group=0;
-  it._renderR=(beginner?148:151)-group*18;prev=it.lon;
- });
- for(const it of sorted){
-  const r=it._renderR,[x,y]=wheelPolar(r,it.lon),d=(it.lon%30).toFixed(1)+'°';
-  svgAdd(root,'circle',{cx:x,cy:y,r:beginner?15:13.5,fill:'#0d1a2d',stroke:'#e4c280','stroke-width':1.2});
-  svgAdd(root,'text',{x,y:y+(beginner?4:5.5),'text-anchor':'middle',fill:'#f2d9a3','font-size':beginner?11:19},beginner?it.label.replace(/^[^ ]+ /,'').slice(0,2):it.glyph);
-  const [dx,dy]=wheelPolar(r+18,it.lon);
-  svgAdd(root,'text',{x:dx,y:dy+3,'text-anchor':'middle',fill:'#f0e3c5','font-size':9},d);
+ const badges=layOutPlanetBadges(items,wheelPolar);
+ // Aspect lines remain tied to the true longitudes; badges may move to avoid collisions.
+ for(const b of badges){
+  const [tx,ty]=wheelPolar(188,b.it.lon);
+  svgAdd(root,'line',{x1:tx,y1:ty,x2:b.x,y2:b.y,stroke:'#d8b675','stroke-width':.8,opacity:.75});
+  svgAdd(root,'circle',{cx:tx,cy:ty,r:2,fill:'#e6c98d'});
+ }
+ for(const b of badges){
+  const {it,x,y}=b;
+  svgAdd(root,'rect',{x:x-19,y:y-19,width:38,height:39,rx:9,fill:'#09172a',stroke:'#e4c280','stroke-width':1.1});
+  svgAdd(root,'text',{x,y:y+1,'text-anchor':'middle',fill:'#f2d9a3','font-size':beginner?12:19,'font-weight':'600'},beginner?it.label.replace(/^[^ ]+ /,'').slice(0,2):it.glyph);
+  svgAdd(root,'text',{x,y:y+14,'text-anchor':'middle',fill:'#f0e3c5','font-size':8.3},degMinString(it.lon));
  }
  if(angles){
   for(const [name,lon,col] of [['ASC',angles.asc,'#e4c17a'],['MC',angles.mc,'#9dd5ec']]){
@@ -296,7 +357,7 @@ function paintNatalChart(items){
   }
  }
  const det=$('angleDetails');det.hidden=false;
- det.textContent=angles?`ASC ${zodiacDesc(angles.asc)} ／ MC ${zodiacDesc(angles.mc)} ／ イコールハウス（第1室＝ASC、30°刻み）`:'出生時刻不明：ASC・MC・ハウスは計算していません。月は正午仮定の参考値です。';
+ det.textContent=angles?`ASC ${zodiacDesc(angles.asc)} ／ MC ${zodiacDesc(angles.mc)} ／ プラシーダスハウス（第1室＝ASC、不等分）`:'出生時刻不明：ASC・MC・ハウスは計算していません。月は正午仮定の参考値です。';
  $('chartLegend').hidden=false;
  const table=$('natalAspectDetails');table.replaceChildren();
  const title=document.createElement('h3');title.textContent=`ネイタル内アスペクト（${pairs.length}件／オーブ±${Number.isFinite(orb)?orb:5}°）`;table.append(title);
@@ -314,8 +375,8 @@ $('autoNatal').addEventListener('click',()=>{
   const items=offlinePositions(date);
   const angles=($(`latitude`).value && $(`longitude`).value)?getAngles(date):null;
   fillPositionInputs('A',items);window.latestAutoNatal=items;window.latestAngles=angles;paintAutoList(items);paintNatalChart(items);
-  $('chartFlag').textContent=angles?'天体位置：計算済み｜星座は反時計回り・ASCは左｜ASC・MC・ハウスは概算':'天体位置：計算済み｜出生時刻不明のためハウス非表示';
-  status.textContent=$('unknown').checked?'計算完了（時刻不明：仮に12:00を使用。月の位置は参考値）。':'計算完了！「チャート」で天体・アスペクト・イコールハウスを確認できます。';
+  $('chartFlag').textContent=angles?'天体位置：計算済み｜星座は反時計回り・ASCは左｜プラシーダス方式（検証中）':'天体位置：計算済み｜出生時刻不明のためハウス非表示';
+  status.textContent=$('unknown').checked?'計算完了（時刻不明：仮に12:00を使用。月の位置は参考値）。':'計算完了！「チャート」で天体・アスペクト・プラシーダスハウスを確認できます。';
  }catch(e){status.textContent='計算できません：'+e.message}
 });
 $('autoTransit').addEventListener('click',()=>{

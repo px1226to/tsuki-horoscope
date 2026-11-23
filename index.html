@@ -19,13 +19,13 @@ h3{color:#e6c887;font-size:14px;margin:5px 0 12px}.planetrow{display:flex;align-
 <nav class="tabs"><button class="tab active" data-tab="natal">出生データ</button><button class="tab" data-tab="chart">チャート</button><button class="tab" data-tab="aspects">アスペクト</button><button class="tab" data-tab="dual">二重円</button><button class="tab" data-tab="calendar">吉凶暦</button><button class="tab" data-tab="saved">保存済み</button></nav>
 <section id="natal" class="tabpage">
  <div class="panel"><h2>☽ ネイタル</h2><div class="grid">
-  <div class="full"><label for="name">お名前（任意）</label><input id="name" placeholder="例：まり"></div>
-  <div><label for="birthdate">生年月日</label><input id="birthdate" type="date" value="1977-12-26"></div>
-  <div><label for="birthtime">出生時刻</label><input id="birthtime" type="time" value="05:55"></div>
-  <div class="full"><label for="place">出生地（都道府県など）</label><input id="place" placeholder="例：愛媛県" value="愛媛県"></div><div class="full"><label for="tz">出生地のUTC時差（時間）</label><input id="tz" type="number" min="-12" max="14" step="0.25" value="9"><p class="note">日本出生は +9。海外出生や夏時間は出生当時の時差を入力してください。</p></div>
-  <div class="full"><label for="cityPreset">出生地の代表地点（都市を選択）</label><select id="cityPreset"><option value="">緯度・経度を手入力</option><option value="ehime" selected>愛媛県（松山市・代表地点）</option><option value="tokyo">東京都（東京）</option><option value="osaka">大阪府（大阪市）</option><option value="kobe">兵庫県（神戸市）</option><option value="hiroshima">広島県（広島市）</option><option value="nagoya">愛知県（名古屋市）</option><option value="sapporo">北海道（札幌市）</option><option value="fukuoka">福岡県（福岡市）</option><option value="sendai">宮城県（仙台市）</option><option value="naha">沖縄県（那覇市）</option></select></div>
- <div><label for="latitude">出生地の緯度（北緯＋）</label><input id="latitude" type="number" min="-89" max="89" step="0.0001" value="33.8392"></div>
- <div><label for="longitude">出生地の経度（東経＋）</label><input id="longitude" type="number" min="-180" max="180" step="0.0001" value="132.7657"></div>
+  <div class="full"><label for="name">お名前（任意）</label><input id="name" placeholder="名前を入力" autocomplete="off"></div>
+  <div><label for="birthdate">生年月日</label><input id="birthdate" type="date" autocomplete="off"></div>
+  <div><label for="birthtime">出生時刻</label><input id="birthtime" type="time" autocomplete="off"></div>
+  <div class="full"><label for="place">出生地（都道府県など）</label><input id="place" placeholder="例：愛媛県" autocomplete="off"></div><div class="full"><label for="tz">出生地のUTC時差（時間）</label><input id="tz" type="number" min="-12" max="14" step="0.25" value="9"><p class="note">日本出生は +9。海外出生や夏時間は出生当時の時差を入力してください。</p></div>
+  <div class="full"><label for="cityPreset">出生地の代表地点（都市を選択）</label><select id="cityPreset"><option value="">緯度・経度を手入力</option><option value="ehime">愛媛県（松山市・代表地点）</option><option value="tokyo">東京都（東京）</option><option value="osaka">大阪府（大阪市）</option><option value="kobe">兵庫県（神戸市）</option><option value="hiroshima">広島県（広島市）</option><option value="nagoya">愛知県（名古屋市）</option><option value="sapporo">北海道（札幌市）</option><option value="fukuoka">福岡県（福岡市）</option><option value="sendai">宮城県（仙台市）</option><option value="naha">沖縄県（那覇市）</option></select></div>
+ <div><label for="latitude">出生地の緯度（北緯＋）</label><input id="latitude" type="number" min="-89" max="89" step="0.0001" placeholder="都市を選択すると入力"></div>
+ <div><label for="longitude">出生地の経度（東経＋）</label><input id="longitude" type="number" min="-180" max="180" step="0.0001" placeholder="都市を選択すると入力"></div>
  <div class="full coordinfo">ハウスは<strong>イコールハウス方式（ASCから30°ずつ）</strong>で試験実装。県名だけでは出生位置を特定できないため、代表都市を仮設定しています。正確な出生地がわかる場合は緯度・経度を修正してください。時刻不明ならASC・MC・ハウスは表示しません。</div>
  <div class="full row"><input type="checkbox" id="unknown"><label for="unknown">出生時刻が不明</label></div>
  </div><div class="actions"><button class="primary" id="autoNatal">☽ 天体を自動計算</button><button class="secondary" id="save">出生データを保存</button><button class="secondary" id="viewChart">円盤を見る</button></div><div id="diagnostic" class="status" style="border:1px solid #816e4c;padding:10px;border-radius:8px;margin-top:12px;color:#ffce98">⚠ この画面ではJavaScriptが実行されていません。ChatGPT内のファイルプレビューでは計算できない場合があります。Webサイトとして公開し、Safariから開いてください。</div>
@@ -74,6 +74,9 @@ window.addEventListener('DOMContentLoaded',function(){var el=document.getElement
 const $=id=>document.getElementById(id);
 const fields=['name','birthdate','birthtime','place','unknown','tz','latitude','longitude','cityPreset'];
 const storageKey='tsuki_horoscope_people_v1';
+// Start with blank birth data every time the app is loaded; saved records remain under 保存済み.
+['name','birthdate','birthtime','place','latitude','longitude'].forEach(id=>{$(id).value=''});
+$('cityPreset').value='';
 function load(){try{const v=JSON.parse(localStorage.getItem(storageKey)||'[]');return Array.isArray(v)?v:[]}catch{return []}}
 function store(v){localStorage.setItem(storageKey,JSON.stringify(v))}
 function current(){const o={};fields.forEach(id=>o[id]=$(id).type==='checkbox'?$(id).checked:$(id).value);return o}
@@ -233,7 +236,7 @@ $('autoNatal').addEventListener('click',()=>{
   const dob=$('birthdate').value,time=$('unknown').checked?'12:00':$('birthtime').value;
   const date=localAsUTC(dob,time,Number($('tz').value));
   const items=offlinePositions(date);
-  const angles=getAngles(date);
+  const angles=($(`latitude`).value && $(`longitude`).value)?getAngles(date):null;
   fillPositionInputs('A',items);window.latestAutoNatal=items;window.latestAngles=angles;paintAutoList(items);paintNatalChart(items);
   $('chartFlag').textContent=angles?'天体位置：計算済み｜ASC・MC・イコールハウスは概算':'天体位置：計算済み｜出生時刻不明のためハウス非表示';
   status.textContent=$('unknown').checked?'計算完了（時刻不明：仮に12:00を使用。月の位置は参考値）。':'計算完了！「チャート」で天体・アスペクト・イコールハウスを確認できます。';

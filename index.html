@@ -61,7 +61,7 @@ h3{color:#e6c887;font-size:14px;margin:5px 0 12px}.planetrow{display:flex;align-
 <p class="note warn">【重要】天体位置は事前計算データ（12時間間隔）を補間した試作値です。境界時刻は約6時間刻みの探索から補間した推定値であり、精密な天文暦による確定日時ではありません。鑑定や販売用の暦には使用せず、専門ソフトで照合してください。画面に表示される出生情報・計算結果はこの端末内で扱います。</p>
 </div></section>
  <section id="saved" class="tabpage hidden"><div class="panel"><h2>☽ 保存済みの出生データ</h2><div id="savedList"></div><p class="note">この端末のブラウザ内だけに保存します。ブラウザデータを削除すると消える場合があります。共有端末では個人情報に注意してください。</p></div></section>
-<footer>月の鑑定室 · Prototype v1.4<br>二重円・吉凶カレンダー（試算）／天体位置・ASC/MC・プラシーダス方式は検証用</footer>
+<footer>月の鑑定室 · Prototype v1.4.1<br>二重円・吉凶カレンダー（試算）／天体位置・ASC/MC・プラシーダス方式は検証用</footer>
 </main>
 <script>
 window.tsukiBooted=true;
@@ -350,11 +350,18 @@ function paintNatalChart(items){
   svgAdd(root,'text',{x,y:y+14,'text-anchor':'middle',fill:'#f0e3c5','font-size':8.3},degMinString(it.lon));
  }
  if(angles){
-  for(const [name,lon,col] of [['ASC',angles.asc,'#e4c17a'],['MC',angles.mc,'#9dd5ec']]){
-   const [x,y]=wheelPolar(214,lon);
-   svgAdd(root,'circle',{cx:x,cy:y,r:17,fill:'#102039',stroke:col,'stroke-width':1.4});
-   svgAdd(root,'text',{x,y:y+4,'text-anchor':'middle',fill:col,'font-size':11,'font-weight':'bold'},name);
-  }
+  // Keep ASC visually outside the zodiac ring on the left, while MC stays near the top outer ring.
+  const [ascAnchorX,ascAnchorY]=wheelPolar(190,angles.asc);
+  const [ascX,ascY]=wheelPolar(232,angles.asc);
+  svgAdd(root,'line',{x1:ascAnchorX,y1:ascAnchorY,x2:ascX-17,y2:ascY,stroke:'#e4c17a','stroke-width':1.1,opacity:.9});
+  svgAdd(root,'circle',{cx:ascX,cy:ascY,r:17,fill:'#102039',stroke:'#e4c17a','stroke-width':1.4});
+  svgAdd(root,'text',{x:ascX,y:ascY+4,'text-anchor':'middle',fill:'#e4c17a','font-size':11,'font-weight':'bold'},'ASC');
+
+  const [mcAnchorX,mcAnchorY]=wheelPolar(190,angles.mc);
+  const [mcX,mcY]=wheelPolar(224,angles.mc);
+  svgAdd(root,'line',{x1:mcAnchorX,y1:mcAnchorY,x2:mcX,y2:mcY+17,stroke:'#9dd5ec','stroke-width':1.0,opacity:.82});
+  svgAdd(root,'circle',{cx:mcX,cy:mcY,r:17,fill:'#102039',stroke:'#9dd5ec','stroke-width':1.4});
+  svgAdd(root,'text',{x:mcX,y:mcY+4,'text-anchor':'middle',fill:'#9dd5ec','font-size':11,'font-weight':'bold'},'MC');
  }
  const det=$('angleDetails');det.hidden=false;
  det.textContent=angles?`ASC ${zodiacDesc(angles.asc)} ／ MC ${zodiacDesc(angles.mc)} ／ プラシーダスハウス（第1室＝ASC、不等分）`:'出生時刻不明：ASC・MC・ハウスは計算していません。月は正午仮定の参考値です。';
@@ -375,7 +382,7 @@ $('autoNatal').addEventListener('click',()=>{
   const items=offlinePositions(date);
   const angles=($(`latitude`).value && $(`longitude`).value)?getAngles(date):null;
   fillPositionInputs('A',items);window.latestAutoNatal=items;window.latestAngles=angles;paintAutoList(items);paintNatalChart(items);
-  $('chartFlag').textContent=angles?'天体位置：計算済み｜星座は反時計回り・ASCは左｜プラシーダス方式（検証中）':'天体位置：計算済み｜出生時刻不明のためハウス非表示';
+  $('chartFlag').textContent=angles?'天体位置：計算済み｜星座は反時計回り・ASCは左外側｜プラシーダス方式（検証中）':'天体位置：計算済み｜出生時刻不明のためハウス非表示';
   status.textContent=$('unknown').checked?'計算完了（時刻不明：仮に12:00を使用。月の位置は参考値）。':'計算完了！「チャート」で天体・アスペクト・プラシーダスハウスを確認できます。';
  }catch(e){status.textContent='計算できません：'+e.message}
 });

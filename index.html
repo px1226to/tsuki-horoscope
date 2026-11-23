@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>月の鑑定室 v0.7 | ハウスとアスペクト</title>
+<title>月の鑑定室 v0.8 | 二重円と吉凶カレンダー</title>
 <style>
 :root{--bg:#080f20;--panel:#132139;--panel2:#0c192c;--gold:#e1c589;--line:#6a5b42;--text:#fffaf0;--muted:#bcc5d2;--accent:#f3d898}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% -12%,#273b5b 0%,var(--bg) 44%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif;line-height:1.6}main{max-width:850px;margin:0 auto;padding:26px 15px 70px}header{text-align:center;padding:12px 0 18px}h1{font-size:clamp(25px,6vw,37px);font-weight:600;letter-spacing:.08em;color:var(--gold);margin:8px 0}header p{color:var(--muted);font-size:13px;margin:0}.moon{font-size:35px}.tabs{display:flex;gap:8px;margin:22px 0}.tab{flex:1;border:1px solid var(--line);background:var(--panel2);color:var(--muted);border-radius:10px;padding:12px 6px;font-size:14px;cursor:pointer}.tab.active{background:linear-gradient(125deg,#b49a61,#655536);color:#fff;border-color:var(--gold);font-weight:bold}.panel{background:linear-gradient(155deg,rgba(23,38,61,.96),rgba(14,26,44,.96));border:1px solid #746344;border-radius:18px;padding:22px 18px;margin:18px 0;box-shadow:0 8px 30px #0003}h2{font-size:20px;color:var(--gold);margin:0 0 15px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}label{display:block;color:#ecd4a9;font-size:13px;margin-bottom:5px}input,select{width:100%;padding:12px 10px;border:1px solid #645c53;border-radius:9px;background:#0b1728;color:white;font:inherit;min-height:46px;color-scheme:dark}input:focus,select:focus{outline:2px solid var(--gold)}.full{grid-column:1/-1}.row{display:flex;align-items:center;gap:8px}.row input[type=checkbox]{width:20px;min-height:20px;accent-color:#d4b97b}.row label{margin:0;color:var(--text)}button{font:inherit;cursor:pointer}.primary{border:1px solid #f2d996;border-radius:999px;background:linear-gradient(120deg,#ae9764,#645338);color:#fff;min-height:48px;padding:10px 24px;font-weight:700}.secondary{border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--gold);padding:10px 17px}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}.note{font-size:12px;color:var(--muted)}.status{margin-top:13px;color:#f5dda7;font-size:13px;min-height:20px}.chart-wrap{max-width:480px;margin:auto}svg{display:block;width:100%;height:auto}.hidden{display:none}.pill{display:inline-block;border:1px solid #8c7855;color:var(--gold);border-radius:20px;padding:3px 11px;font-size:12px}.saved-entry{border-bottom:1px solid #4e4d4c;padding:11px 0;display:flex;align-items:center;justify-content:space-between;gap:8px}.saved-entry:last-child{border-bottom:0}.saved-entry button{font-size:12px}.saved-entry span{font-size:13px;color:var(--muted)}footer{font-size:12px;text-align:center;color:var(--muted);padding:24px 4px}@media(max-width:420px){.grid{gap:10px}.panel{padding:19px 13px}.actions button{width:100%}}
 h3{color:#e6c887;font-size:14px;margin:5px 0 12px}.planetrow{display:flex;align-items:center;gap:6px;margin:7px 0}.planetrow label{min-width:58px;margin:0;font-size:12px}.planetrow input{min-width:0;padding:7px;min-height:36px;font-size:13px}.results-table{width:100%;border-collapse:collapse;font-size:12px;margin:12px 0}.results-table th,.results-table td{border-bottom:1px solid #685b45;padding:8px 5px;text-align:left}.results-table th{color:var(--gold)}.results-scroll{overflow-x:auto}.tag{font-size:11px;border:1px solid #827156;border-radius:10px;padding:2px 7px}.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
@@ -16,7 +16,7 @@ h3{color:#e6c887;font-size:14px;margin:5px 0 12px}.planetrow{display:flex;align-
 </head>
 <body>
 <main><header><div class="moon">☾ ✦ ☽</div><h1>月の鑑定室</h1><p>HOROSCOPE · PRIVATE STUDIO</p></header>
-<nav class="tabs"><button class="tab active" data-tab="natal">出生データ</button><button class="tab" data-tab="chart">チャート</button><button class="tab" data-tab="aspects">アスペクト</button><button class="tab" data-tab="saved">保存済み</button></nav>
+<nav class="tabs"><button class="tab active" data-tab="natal">出生データ</button><button class="tab" data-tab="chart">チャート</button><button class="tab" data-tab="aspects">アスペクト</button><button class="tab" data-tab="dual">二重円</button><button class="tab" data-tab="calendar">吉凶暦</button><button class="tab" data-tab="saved">保存済み</button></nav>
 <section id="natal" class="tabpage">
  <div class="panel"><h2>☽ ネイタル</h2><div class="grid">
   <div class="full"><label for="name">お名前（任意）</label><input id="name" placeholder="例：まり"></div>
@@ -44,8 +44,24 @@ h3{color:#e6c887;font-size:14px;margin:5px 0 12px}.planetrow{display:flex;align-
  <p class="note" id="viewHint">プロ表示：天体記号・星座記号・度数を表示します。</p><div class="chart-wrap"><svg id="aspectWheel" viewBox="0 0 500 500" role="img" aria-label="手入力された天体位置のホロスコープ円盤"></svg></div>
  </div><div class="panel"><h2>☽ 開発予定の機能</h2><p>出生地座標によるASC・MC・ハウス／三重円／吉凶カレンダー／講座生ごとのログイン／鑑定レポート。</p><p class="note">時刻不明の場合、月・ASC・ハウス等は確定できないことがあります。アプリ完成時は計算条件と精度も表示します。</p></div>
  </section>
+
+<section id="dual" class="tabpage hidden"><div class="panel"><h2>☽ 二重円：ネイタル × トランジット</h2>
+<p class="note">出生データ画面で「天体を自動計算」したあとに使用してください。内側がネイタル（金）、外側がトランジット（水色）。アスペクト線は内外の天体間です。</p>
+<div class="grid"><div><label for="dualDate">トランジット日（日本時間）</label><input id="dualDate" type="date" value="2027-01-01"></div><div><label for="dualTime">時刻（日本時間）</label><input id="dualTime" type="time" value="12:00"></div></div>
+<div class="actions"><button id="makeDual" class="primary">二重円を計算・表示</button></div><p id="dualStatus" class="status" aria-live="polite"></p>
+<div class="chart-wrap"><svg id="dualWheel" viewBox="0 0 500 500" role="img" aria-label="ネイタルとトランジットの二重円"></svg></div>
+<p class="smalllegend">金＝ネイタル・水色＝トランジット／赤＝スクエア・オポジション、青＝セクスタイル・トライン、金＝コンジャンクション。オーブはアスペクト画面の設定を使用。</p><div class="results-scroll" id="dualAspects"></div>
+</div></section>
+<section id="calendar" class="tabpage hidden"><div class="panel"><h2>✧ 年間アスペクトカレンダー</h2>
+<p class="note">ネイタル5組み合わせ × トランジット／合・スクエア・トライン・オポジション。各アスペクトがオーブ内に入る期間を日本時間で検索します。</p>
+<div class="grid"><div><label for="calYear">対象年</label><input id="calYear" type="number" value="2027" min="1901" max="2098" step="1"></div><div><label for="calOrb">オーブ（±°）</label><input id="calOrb" type="number" value="5" min="0.1" max="10" step="0.5"></div></div>
+<div class="feature"><strong>検索対象（固定5組）</strong><p class="note">出生金星×経過金星 ／ 出生太陽×経過木星 ／ 出生月×経過木星 ／ 出生金星×経過木星 ／ 出生火星×経過火星</p></div>
+<div class="actions"><button id="buildCalendar" class="primary">１年分を計算する</button><button id="downloadCalendar" class="secondary" disabled>CSVを保存</button></div>
+<p id="calStatus" class="status" aria-live="polite"></p><div id="calResults" class="results-scroll"></div>
+<p class="note warn">【重要】天体位置は事前計算データ（12時間間隔）を補間した試作値です。境界時刻は約6時間刻みの探索から補間した推定値であり、精密な天文暦による確定日時ではありません。鑑定や販売用の暦には使用せず、専門ソフトで照合してください。画面に表示される出生情報・計算結果はこの端末内で扱います。</p>
+</div></section>
  <section id="saved" class="tabpage hidden"><div class="panel"><h2>☽ 保存済みの出生データ</h2><div id="savedList"></div><p class="note">この端末のブラウザ内だけに保存します。ブラウザデータを削除すると消える場合があります。共有端末では個人情報に注意してください。</p></div></section>
-<footer>月の鑑定室 · Prototype v0.7<br>天体位置は概算 · ASC/MCは概算 · ハウスはイコール方式（検証用）</footer>
+<footer>月の鑑定室 · Prototype v0.8<br>二重円・吉凶カレンダー（試算）／天体位置・ASC/MC・ハウスは検証用</footer>
 </main>
 <script>
 window.tsukiBooted=true;
@@ -233,6 +249,95 @@ $('autoTransit').addEventListener('click',()=>{
 });
 $('viewChart').addEventListener('click',()=>{if(window.latestAutoNatal)paintNatalChart(window.latestAutoNatal)});
 document.querySelector('[data-tab="chart"]').addEventListener('click',()=>{if(window.latestAutoNatal)paintNatalChart(window.latestAutoNatal)});
+
+// v0.8 additions: two-ring comparison and interval search using existing offline ephemeris.
+const aspectFour=[['コンジャンクション',0,'☌'],['スクエア',90,'□'],['トライン',120,'△'],['オポジション',180,'☍']];
+function natalForExtras(){
+ const date=localAsUTC($('birthdate').value,$('unknown').checked?'12:00':$('birthtime').value,Number($('tz').value));
+ const items=offlinePositions(date);return items;
+}
+function addCirclePoint(root,p,r,stroke,colorText){
+ const [x,y]=polar(r,p.lon);
+ svgAdd(root,'circle',{cx:x,cy:y,r:12,stroke,'stroke-width':1.2,fill:'#10203a'});
+ svgAdd(root,'text',{x,y:y+5,'text-anchor':'middle',fill:colorText,'font-size':16},p.glyph);
+}
+function showDual(){
+ const st=$('dualStatus');st.textContent='二重円を計算しています…';
+ try{
+ const natal=natalForExtras();const dt=localAsUTC($('dualDate').value,$('dualTime').value,9);const transit=offlinePositions(dt);
+ const root=$('dualWheel');root.replaceChildren();const add=(tag,at,txt)=>svgAdd(root,tag,at,txt);
+ for(const r of [237,202,159,115,81])add('circle',{cx:250,cy:250,r,fill:'none',stroke:'#ad9468','stroke-width':r===237?2:1,opacity:.85});
+ for(let z=0;z<12;z++){
+   const [x1,y1]=polar(159,z*30),[x2,y2]=polar(237,z*30);add('line',{x1,y1,x2,y2,stroke:'#857455','stroke-width':.8});
+   const [x,y]=polar(222,z*30+15);add('text',{x,y:y+6,'text-anchor':'middle',fill:'#efd8a0','font-size':23},chartView==='beginner'?zodiacNames[z].slice(0,2):zodiac[z]);
+ }
+ const orb=Number($('orb').value);const validOrb=Number.isFinite(orb)&&orb>=0&&orb<=15?orb:5;
+ const pairs=calcPairs(natal,transit,'transit',validOrb,$('asptype').value==='four'?[0,90,120,180]:[0,60,90,120,180]);
+ pairs.forEach(p=>{const [x1,y1]=polar(74,p.a.lon),[x2,y2]=polar(74,p.b.lon);add('line',{x1,y1,x2,y2,stroke:p.angle===90||p.angle===180?'#e79395':p.angle===0?'#d9c07c':'#8bc7ec','stroke-width':1.25,opacity:.55})});
+ natal.forEach(p=>addCirclePoint(root,p,129,'#eccb86','#f2dbab'));
+ transit.forEach(p=>addCirclePoint(root,p,184,'#92d5eb','#9fe6f8'));
+ add('text',{x:250,y:243,'text-anchor':'middle',fill:'#f0d9a7','font-size':13},'内：出生天体');
+ add('text',{x:250,y:264,'text-anchor':'middle',fill:'#a9def1','font-size':12},'外：経過天体');
+ const dest=$('dualAspects');dest.replaceChildren();const h=document.createElement('h3');h.textContent=`ネイタル × トランジット：${pairs.length}件`;dest.append(h);
+ const tbl=document.createElement('table');tbl.className='planet-results';let row=document.createElement('tr');['出生天体','角度','経過天体','誤差'].forEach(t=>{let th=document.createElement('th');th.textContent=t;row.append(th)});tbl.append(row);
+ pairs.forEach(p=>{const tr=document.createElement('tr');[p.a.label,p.symbol+' '+p.name,p.b.label,p.deviation.toFixed(2)+'°'].forEach(v=>{let td=document.createElement('td');td.textContent=v;tr.append(td)});tbl.append(tr)});dest.append(tbl);
+ st.textContent='表示しました。金色が出生天体、水色が指定日時のトランジットです。';
+ }catch(err){st.textContent='計算できません：'+err.message}
+}
+$('makeDual').addEventListener('click',showDual);
+const calendarPairs=[['venus','venus','金星×金星'],['sun','jupiter','太陽×木星'],['moon','jupiter','月×木星'],['venus','jupiter','金星×木星'],['mars','mars','火星×火星']];
+let lastCalendarRows=[];
+const dateLabelJST=ms=>{const d=new Date(ms+9*3600000);return d.getUTCFullYear()+'/'+String(d.getUTCMonth()+1).padStart(2,'0')+'/'+String(d.getUTCDate()).padStart(2,'0')+' '+String(d.getUTCHours()).padStart(2,'0')+':'+String(d.getUTCMinutes()).padStart(2,'0')};
+function calDeviation(lon1,lon2,ang){return Math.abs(angleDiff(lon1,lon2)-ang)}
+function getLongitudeAt(ms,key){const item=offlinePositions(new Date(ms)).find(x=>x.key===key);return item.lon}
+function refineCalBoundary(t0,t1,natalLon,trKey,angle,orb,entering){
+ // Binary search for a crossing of |aspect residual| = orb, to within 1 minute.
+ const inside=t=>calDeviation(natalLon,getLongitudeAt(t,trKey),angle)<=orb;
+ for(let k=0;k<13&&t1-t0>60000;k++){
+  const mid=Math.floor((t0+t1)/2);
+  if(inside(mid)===entering)t1=mid;else t0=mid;
+ }
+ return Math.round(((t0+t1)/2)/60000)*60000;
+}
+function calculateCalendar(){
+ const st=$('calStatus');st.textContent='計算中…';$('downloadCalendar').disabled=true;
+ try{
+  const year=Number($('calYear').value),orb=Number($('calOrb').value);
+  if(!Number.isInteger(year)||year<1901||year>2098)throw Error('対象年は1901〜2098の範囲で入力してください。');
+  if(!Number.isFinite(orb)||orb<.1||orb>10)throw Error('オーブは0.1〜10度で入力してください。');
+  const natal=natalForExtras();const natalByKey=Object.fromEntries(natal.map(p=>[p.key,p.lon]));
+  const start=Date.UTC(year,0,1)-9*3600000,end=Date.UTC(year+1,0,1)-9*3600000,step=6*3600000;
+  const definitions=[];calendarPairs.forEach(([na,tr,label])=>aspectFour.forEach(([asp,angle])=>definitions.push({na,tr,label,asp,angle})));
+  const active=definitions.map(()=>null),results=[];
+  let previous=null;
+  for(let t=start;t<=end;t+=step){
+   const current=Object.fromEntries(offlinePositions(new Date(t)).map(x=>[x.key,x.lon]));
+   definitions.forEach((def,i)=>{
+    const inside=calDeviation(natalByKey[def.na],current[def.tr],def.angle)<=orb;
+    if(previous){
+     const was=calDeviation(natalByKey[def.na],previous[def.tr],def.angle)<=orb;
+     if(!was&&inside)active[i]=refineCalBoundary(t-step,t,natalByKey[def.na],def.tr,def.angle,orb,true);
+     if(was&&!inside){const from=active[i]??start;const to=refineCalBoundary(t-step,t,natalByKey[def.na],def.tr,def.angle,orb,false);results.push({label:def.label,asp:def.asp,from,to});active[i]=null;}
+    }else if(inside)active[i]=start;
+   });
+   previous=current;
+  }
+  definitions.forEach((def,i)=>{if(active[i]!==null)results.push({label:def.label,asp:def.asp,from:active[i],to:end})});
+  results.sort((a,b)=>a.from-b.from||a.label.localeCompare(b.label,'ja'));lastCalendarRows=results;
+  const host=$('calResults');host.replaceChildren();const heading=document.createElement('h3');heading.textContent=`${year}年：${results.length}期間（日本時間・オーブ±${orb}°）`;host.append(heading);
+  const tab=document.createElement('table');tab.className='planet-results';const hd=document.createElement('tr');['組み合わせ','アスペクト','開始（目安）','終了（目安）'].forEach(v=>{const th=document.createElement('th');th.textContent=v;hd.append(th)});tab.append(hd);
+  results.forEach(r=>{const tr=document.createElement('tr');[r.label,r.asp,dateLabelJST(r.from),dateLabelJST(r.to)].forEach(v=>{const td=document.createElement('td');td.textContent=v;tr.append(td)});tab.append(tr)});host.append(tab);
+  $('downloadCalendar').disabled=!results.length;
+  st.textContent=`完了：${results.length}期間を抽出しました。時刻は試算値です。`;
+ }catch(err){st.textContent='計算できません：'+err.message}
+}
+$('buildCalendar').addEventListener('click',()=>{setTimeout(calculateCalendar,20)});
+$('downloadCalendar').addEventListener('click',()=>{
+ const lines=[['組み合わせ','アスペクト','開始（日本時間・推定）','終了（日本時間・推定）'],...lastCalendarRows.map(r=>[r.label,r.asp,dateLabelJST(r.from),dateLabelJST(r.to)])];
+ const csv='\ufeff'+lines.map(row=>row.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')).join('\r\n');
+ const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='tsuki_aspects_'+$('calYear').value+'_estimated.csv';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3000)
+});
+
 window.tsukiAppReady=true;
 document.getElementById('diagnostic').textContent='✅ プログラムの初期化に成功しました。天体を自動計算できます。';
 document.getElementById('diagnostic').style.color='#c9e9ca';

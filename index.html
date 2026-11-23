@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>月の鑑定室 v1.1 | ASC左配置</title>
+<title>月の鑑定室 v1.2 | ASC左・星座反時計回り</title>
 <style>
 :root{--bg:#080f20;--panel:#132139;--panel2:#0c192c;--gold:#e1c589;--line:#6a5b42;--text:#fffaf0;--muted:#bcc5d2;--accent:#f3d898}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% -12%,#273b5b 0%,var(--bg) 44%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif;line-height:1.6}main{max-width:850px;margin:0 auto;padding:26px 15px 70px}header{text-align:center;padding:12px 0 18px}h1{font-size:clamp(25px,6vw,37px);font-weight:600;letter-spacing:.08em;color:var(--gold);margin:8px 0}header p{color:var(--muted);font-size:13px;margin:0}.moon{font-size:35px}.tabs{display:flex;gap:8px;margin:22px 0}.tab{flex:1;border:1px solid var(--line);background:var(--panel2);color:var(--muted);border-radius:10px;padding:12px 6px;font-size:14px;cursor:pointer}.tab.active{background:linear-gradient(125deg,#b49a61,#655536);color:#fff;border-color:var(--gold);font-weight:bold}.panel{background:linear-gradient(155deg,rgba(23,38,61,.96),rgba(14,26,44,.96));border:1px solid #746344;border-radius:18px;padding:22px 18px;margin:18px 0;box-shadow:0 8px 30px #0003}h2{font-size:20px;color:var(--gold);margin:0 0 15px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}label{display:block;color:#ecd4a9;font-size:13px;margin-bottom:5px}input,select{width:100%;padding:12px 10px;border:1px solid #645c53;border-radius:9px;background:#0b1728;color:white;font:inherit;min-height:46px;color-scheme:dark}input:focus,select:focus{outline:2px solid var(--gold)}.full{grid-column:1/-1}.row{display:flex;align-items:center;gap:8px}.row input[type=checkbox]{width:20px;min-height:20px;accent-color:#d4b97b}.row label{margin:0;color:var(--text)}button{font:inherit;cursor:pointer}.primary{border:1px solid #f2d996;border-radius:999px;background:linear-gradient(120deg,#ae9764,#645338);color:#fff;min-height:48px;padding:10px 24px;font-weight:700}.secondary{border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--gold);padding:10px 17px}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}.note{font-size:12px;color:var(--muted)}.status{margin-top:13px;color:#f5dda7;font-size:13px;min-height:20px}.chart-wrap{max-width:480px;margin:auto}svg{display:block;width:100%;height:auto}.hidden{display:none}.pill{display:inline-block;border:1px solid #8c7855;color:var(--gold);border-radius:20px;padding:3px 11px;font-size:12px}.saved-entry{border-bottom:1px solid #4e4d4c;padding:11px 0;display:flex;align-items:center;justify-content:space-between;gap:8px}.saved-entry:last-child{border-bottom:0}.saved-entry button{font-size:12px}.saved-entry span{font-size:13px;color:var(--muted)}footer{font-size:12px;text-align:center;color:var(--muted);padding:24px 4px}@media(max-width:420px){.grid{gap:10px}.panel{padding:19px 13px}.actions button{width:100%}}
 h3{color:#e6c887;font-size:14px;margin:5px 0 12px}.planetrow{display:flex;align-items:center;gap:6px;margin:7px 0}.planetrow label{min-width:58px;margin:0;font-size:12px}.planetrow input{min-width:0;padding:7px;min-height:36px;font-size:13px}.results-table{width:100%;border-collapse:collapse;font-size:12px;margin:12px 0}.results-table th,.results-table td{border-bottom:1px solid #685b45;padding:8px 5px;text-align:left}.results-table th{color:var(--gold)}.results-scroll{overflow-x:auto}.tag{font-size:11px;border:1px solid #827156;border-radius:10px;padding:2px 7px}.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
@@ -61,7 +61,7 @@ h3{color:#e6c887;font-size:14px;margin:5px 0 12px}.planetrow{display:flex;align-
 <p class="note warn">【重要】天体位置は事前計算データ（12時間間隔）を補間した試作値です。境界時刻は約6時間刻みの探索から補間した推定値であり、精密な天文暦による確定日時ではありません。鑑定や販売用の暦には使用せず、専門ソフトで照合してください。画面に表示される出生情報・計算結果はこの端末内で扱います。</p>
 </div></section>
  <section id="saved" class="tabpage hidden"><div class="panel"><h2>☽ 保存済みの出生データ</h2><div id="savedList"></div><p class="note">この端末のブラウザ内だけに保存します。ブラウザデータを削除すると消える場合があります。共有端末では個人情報に注意してください。</p></div></section>
-<footer>月の鑑定室 · Prototype v1.1<br>二重円・吉凶カレンダー（試算）／天体位置・ASC/MC・ハウスは検証用</footer>
+<footer>月の鑑定室 · Prototype v1.2<br>二重円・吉凶カレンダー（試算）／天体位置・ASC/MC・ハウスは検証用</footer>
 </main>
 <script>
 window.tsukiBooted=true;
@@ -118,10 +118,10 @@ const zodiacNames=['牡羊座','牡牛座','双子座','蟹座','獅子座','乙
 let chartView='pro';try{chartView=localStorage.getItem('tsuki_chart_view')==='beginner'?'beginner':'pro'}catch{}
 let lastWheelData=null;
 function svgAdd(root,tag,attrs,content){const e=document.createElementNS(ns,tag);Object.entries(attrs).forEach(([k,v])=>e.setAttribute(k,v));if(content!==undefined)e.textContent=content;root.appendChild(e);return e}
-function polar(r,lon,rotation=0){const a=(lon-90-rotation)*Math.PI/180;return [250+r*Math.cos(a),250+r*Math.sin(a)]}
+function polar(r,lon,rotation=0){const a=(-90-lon+rotation)*Math.PI/180;return [250+r*Math.cos(a),250+r*Math.sin(a)]}
 function renderZodiacWheel(){
  svg.replaceChildren();
- const natalRotation=window.latestAutoNatal&&window.latestAngles?window.latestAngles.asc-270:0;
+ const natalRotation=window.latestAutoNatal&&window.latestAngles?window.latestAngles.asc+270:0;
  const wheelPolar=(r,lon)=>polar(r,lon,natalRotation);
 
  const beginner=chartView==='beginner';
@@ -252,7 +252,7 @@ function paintNatalChart(items){
  renderZodiacWheel();const root=$('wheel'),beginner=chartView==='beginner',angles=window.latestAngles;
  Array.from(root.querySelectorAll('text')).filter(t=>['☾ 月の鑑定室','PRO DISPLAY PREVIEW','やさしい表示見本'].includes(t.textContent)).forEach(t=>t.remove());
  const zodiacInner=190, houseOuter=170, houseInner=92, centerR=74;
- const natalRotation=angles?angles.asc-270:0;
+ const natalRotation=angles?angles.asc+270:0;
  const wheelPolar=(r,lon)=>polar(r,lon,natalRotation);
 
  if(angles){
